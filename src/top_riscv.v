@@ -1,4 +1,8 @@
-module top_riscv(input clk, input reset);
+module top_riscv(input clk, input reset,
+ output [31:0] debug_x1,
+    output [31:0] debug_x2,
+    output [31:0] debug_x3,
+    output [31:0] debug_wb);
 
     wire [31:0] if_id_instr, if_id_pc4;
 
@@ -23,11 +27,20 @@ module top_riscv(input clk, input reset);
 
     wire pc_write, if_id_write, id_ex_flush;
     wire [1:0] fwdA, fwdB;
+//==================================================
+// Hazard Detection Unit
+//==================================================
+hazard_unit HZ (
+    .id_ex_memread(ex_memread),
+    .id_ex_rd(ex_rd),
 
-    // TEMP: disable hazards
-    assign pc_write = 1;
-    assign if_id_write = 1;
-    assign id_ex_flush = 0;
+    .if_id_rs1(if_id_instr[19:15]),
+    .if_id_rs2(if_id_instr[24:20]),
+
+    .pc_write(pc_write),
+    .if_id_write(if_id_write),
+    .id_ex_flush(id_ex_flush)
+);
 
     // IF
     if_stage IF(clk, reset, pc_write, ex_btaken, ex_bt, if_id_write, if_id_instr, if_id_pc4);
@@ -77,5 +90,11 @@ module top_riscv(input clk, input reset);
         ex_regwrite, mem_regwrite, ex_rd, mem_rd,
         rs1, rs2, fwdA, fwdB
     );
+// Debug outputs to prevent optimization
 
+assign debug_x1 = ID.regfile[1];
+assign debug_x2 = ID.regfile[2];
+assign debug_x3 = ID.regfile[3];
+
+assign debug_wb = wb_data;
 endmodule

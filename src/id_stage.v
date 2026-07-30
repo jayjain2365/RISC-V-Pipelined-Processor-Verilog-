@@ -21,21 +21,18 @@ module id_stage(
 );
 reg [31:0] regfile [0:31];
 integer i;
+    
 
-always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        for(i=0; i<32; i=i+1)
+   always @(posedge clk or posedge reset)
+begin
+    if(reset)begin
+       for(i=0; i<32; i=i+1)
             regfile[i] <= 0;
     end
-    else if (wb_regwrite && wb_rd != 0)
+    else if(wb_regwrite && wb_rd != 0)
         regfile[wb_rd] <= wb_writedata;
 end
-    wire [6:0] opcode = if_id_instr[6:0];
-
-    always @(posedge clk)
-        if (wb_regwrite && wb_rd != 0)
-            regfile[wb_rd] <= wb_writedata;
-
+wire [6:0] opcode = if_id_instr[6:0];
     always @(*) begin
         rs1 = if_id_instr[19:15];
         rs2 = if_id_instr[24:20];
@@ -52,12 +49,35 @@ end
         alusrc=0; aluop=0; branch=0;
         memread=0; memwrite=0; regwrite=0; memtoreg=0;
 
-        case (opcode)
-            7'b0110011: begin aluop=2'b10; regwrite=1; end
-            7'b0000011: begin alusrc=1; memread=1; regwrite=1; memtoreg=1; end
-            7'b0100011: begin alusrc=1; memwrite=1; end
-            7'b1100011: begin branch=1; aluop=2'b01; end
-        endcase
+       case (opcode)
+    7'b0110011: begin
+        aluop = 2'b10;
+        regwrite = 1;
+    end
+
+    7'b0010011: begin      // ADDI
+        alusrc = 1;
+        regwrite = 1;
+        aluop = 2'b00;
+    end
+
+    7'b0000011: begin
+        alusrc = 1;
+        memread = 1;
+        regwrite = 1;
+        memtoreg = 1;
+    end
+
+    7'b0100011: begin
+        alusrc = 1;
+        memwrite = 1;
+    end
+
+    7'b1100011: begin
+        branch = 1;
+        aluop = 2'b01;
+    end
+endcase
 
         if (id_ex_flush) begin
             alusrc=0; aluop=0; branch=0;

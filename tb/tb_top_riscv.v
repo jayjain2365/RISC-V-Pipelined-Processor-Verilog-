@@ -58,7 +58,7 @@ module tb_top_riscv;
         $display("x5 = %0d", DUT.ID.regfile[5]);
         $display("x6 = %0d", DUT.ID.regfile[6]);
         $display("x7 = %0d", DUT.ID.regfile[7]);
-
+        $display("x1 = %d", DUT.ID.regfile[1]);
         $stop;
     end
 

@@ -10,8 +10,10 @@ module hazard_unit(
 );
 
     always @(*) begin
-        if (id_ex_memread &&
-           ((id_ex_rd == if_id_rs1) || (id_ex_rd == if_id_rs2))) begin
+      if (id_ex_memread &&
+    (id_ex_rd != 5'd0) &&
+   ((id_ex_rd == if_id_rs1) ||
+    (id_ex_rd == if_id_rs2))) begin
 
             // Stall pipeline
             pc_write   = 0;
