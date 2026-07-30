@@ -1,100 +1,131 @@
-# RISC-V Pipelined Processor in Verilog HDL
+# 32-bit 5-Stage Pipelined RISC-V Processor in Verilog HDL
 
 ## Overview
 
-This project implements a 5-Stage RISC-V Pipelined Processor using Verilog HDL. The processor follows the classic RISC pipeline architecture consisting of Instruction Fetch (IF), Instruction Decode (ID), Execute (EX), Memory Access (MEM), and Write Back (WB) stages.
+This project implements a **32-bit 5-stage pipelined RISC-V processor** supporting a **subset of the RV32I instruction set** using **Verilog HDL**. The processor follows the classic RISC pipeline architecture consisting of Instruction Fetch (IF), Instruction Decode (ID), Execute (EX), Memory Access (MEM), and Write Back (WB) stages.
 
-The design demonstrates fundamental concepts of Computer Architecture, Digital Design, RTL Design, and Processor Implementation. Additional modules such as Hazard Detection and Forwarding Units are incorporated to improve pipeline efficiency and resolve data hazards.
+The design demonstrates fundamental concepts of **Computer Architecture, RTL Design, Digital Logic, and Processor Design**. It also incorporates **Hazard Detection** and **Data Forwarding** units to improve pipeline efficiency by handling data hazards during instruction execution.
 
----
-
-## Features
-
-* 5-Stage RISC-V Pipeline Architecture
-* Modular Verilog HDL Design
-* Instruction Fetch (IF) Stage
-* Instruction Decode (ID) Stage
-* Execute (EX) Stage
-* Memory Access (MEM) Stage
-* Write Back (WB) Stage
-* Hazard Detection Unit
-* Forwarding Unit
-* RTL Simulation and Verification
-* Waveform Analysis
-* Architectural Block Diagrams
+> **Note:** This is an educational implementation intended to demonstrate pipelined processor design, hazard detection, forwarding mechanisms, and RTL development using a subset of the RV32I instruction set.
 
 ---
 
-## Processor Architecture
+# Project Specifications
 
-The processor is organized into five pipeline stages:
-
-### 1. Instruction Fetch (IF)
-
-Responsibilities:
-
-* Program Counter (PC) Management
-* Instruction Fetch from Instruction Memory
-* PC Increment Logic
-
-### 2. Instruction Decode (ID)
-
-Responsibilities:
-
-* Instruction Decoding
-* Register Operand Extraction
-* Control Signal Generation
-
-### 3. Execute (EX)
-
-Responsibilities:
-
-* Arithmetic Operations
-* Logical Operations
-* ALU Processing
-* Branch Computation
-
-### 4. Memory Access (MEM)
-
-Responsibilities:
-
-* Data Memory Read
-* Data Memory Write
-* Memory Interface Operations
-
-### 5. Write Back (WB)
-
-Responsibilities:
-
-* Writing Computed Results Back to Register File
+| Specification | Details |
+|--------------|---------|
+| Processor | 32-bit RISC-V |
+| ISA | RV32I (Subset) |
+| Pipeline | 5-Stage |
+| HDL | Verilog HDL |
+| Hazard Detection | Yes |
+| Data Forwarding | Yes |
+| Simulation Tool | Xilinx Vivado |
 
 ---
 
-## Pipeline Hazard Management
+# Features
 
-### Hazard Detection Unit
+- 32-bit 5-Stage Pipelined Processor
+- RV32I Subset Implementation
+- Modular Verilog RTL Design
+- Instruction Fetch (IF)
+- Instruction Decode (ID)
+- Execute (EX)
+- Memory Access (MEM)
+- Write Back (WB)
+- Hazard Detection Unit
+- Data Forwarding Unit
+- RTL Simulation and Verification
 
-The Hazard Detection Unit identifies situations where instruction execution may produce incorrect results due to data dependencies.
+---
+
+# Supported Instructions
+
+The current implementation supports a subset of the RV32I instruction set, including:
+
+- ADD
+- SUB
+- ADDI
+- AND
+- OR
+- LW
+- SW
+- BEQ
+- NOP
+
+---
+
+# Processor Architecture
+
+The processor is organized into five pipeline stages.
+
+## 1. Instruction Fetch (IF)
+
+Responsibilities:
+
+- Program Counter (PC) Management
+- Instruction Fetch from Instruction Memory
+- PC Increment Logic
+
+## 2. Instruction Decode (ID)
+
+Responsibilities:
+
+- Instruction Decoding
+- Register Operand Extraction
+- Control Signal Generation
+
+## 3. Execute (EX)
+
+Responsibilities:
+
+- ALU Arithmetic Operations
+- Logical Operations
+- Branch Address Computation
+- Operand Selection
+
+## 4. Memory Access (MEM)
+
+Responsibilities:
+
+- Data Memory Read
+- Data Memory Write
+- Memory Interface Operations
+
+## 5. Write Back (WB)
+
+Responsibilities:
+
+- Write Computed Results Back to Register File
+
+---
+
+# Pipeline Hazard Management
+
+## Hazard Detection Unit
+
+The Hazard Detection Unit detects data dependencies that could lead to incorrect execution.
 
 Functions:
 
-* Detects data hazards
-* Generates stall conditions
-* Maintains pipeline correctness
+- Detects load-use hazards
+- Generates pipeline stall signals
+- Maintains correct instruction execution
 
-### Forwarding Unit
+## Forwarding Unit
 
-The Forwarding Unit reduces pipeline stalls by forwarding results from later pipeline stages to earlier stages.
+The Forwarding Unit minimizes stalls by forwarding data from later pipeline stages to earlier stages.
 
 Functions:
 
-* Resolves Read-After-Write (RAW) hazards
-* Improves pipeline performance
-* Minimizes unnecessary stalls
+- Resolves Read-After-Write (RAW) hazards
+- Reduces unnecessary pipeline stalls
+- Improves overall pipeline performance
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
 RISC-V-Pipelined-Processor
@@ -105,8 +136,8 @@ RISC-V-Pipelined-Processor
 │   ├── ex_stage.v
 │   ├── mem_stage.v
 │   ├── wb_stage.v
-│   ├── hazard_unit.v
 │   ├── forwarding_unit.v
+│   ├── hazard_unit.v
 │   └── top_riscv.v
 │
 ├── tb
@@ -124,95 +155,95 @@ RISC-V-Pipelined-Processor
 │   ├── waveform1.png
 │   └── waveform2.png
 │
-└── RISC.docx
+└── README.md
 ```
 
 ---
 
-## Source Modules
+# Source Modules
 
-| Module            | Description                     |
-| ----------------- | ------------------------------- |
-| if_stage.v        | Instruction Fetch Stage         |
-| id_stage.v        | Instruction Decode Stage        |
-| ex_stage.v        | Execute Stage                   |
-| mem_stage.v       | Memory Access Stage             |
-| wb_stage.v        | Write Back Stage                |
-| forwarding_unit.v | Data Forwarding Logic           |
-| hazard_unit.v     | Hazard Detection Logic          |
-| top_riscv.v       | Top-Level Processor Integration |
+| Module | Description |
+|---------|-------------|
+| if_stage.v | Instruction Fetch Stage |
+| id_stage.v | Instruction Decode Stage |
+| ex_stage.v | Execute Stage |
+| mem_stage.v | Memory Access Stage |
+| wb_stage.v | Write Back Stage |
+| forwarding_unit.v | Data Forwarding Logic |
+| hazard_unit.v | Hazard Detection Logic |
+| top_riscv.v | Top-Level Processor Integration |
 
 ---
 
-## Simulation
+# Simulation
 
-The processor was verified using a dedicated testbench:
+The processor was functionally verified using a dedicated Verilog testbench:
 
 ```text
 tb_top_riscv.v
 ```
 
-Simulation verifies:
+The simulation validates:
 
-* Instruction Flow
-* Pipeline Operation
-* Hazard Handling
-* Forwarding Logic
-* Correct Data Propagation
+- Instruction execution
+- Pipeline operation
+- Register write-back
+- Data forwarding
+- Hazard detection
+- Correct data propagation through all pipeline stages
 
-Waveform screenshots are provided in the repository.
-
----
-
-## Tools Used
-
-* Verilog HDL
-* Xilinx Vivado
-* RTL Simulation
-* Waveform Analysis
-* Git & GitHub
+Simulation waveforms are included in the repository.
 
 ---
 
-## Learning Outcomes
+# Tools Used
+
+- Verilog HDL
+- Xilinx Vivado
+- RTL Simulation
+- Waveform Analysis
+
+---
+
+# Learning Outcomes
 
 This project provided practical experience in:
 
-* RTL Design Methodology
-* Computer Architecture
-* Pipeline Processor Design
-* Hazard Detection Techniques
-* Forwarding Mechanisms
-* Hardware Verification
-* FPGA Design Flow
-* GitHub Project Management
+- RTL Design Methodology
+- Computer Architecture
+- Pipeline Processor Design
+- Hazard Detection Techniques
+- Data Forwarding Mechanisms
+- Hardware Verification
+- FPGA Design Flow
+- Git Version Control
 
 ---
 
-## Future Improvements
+# Future Improvements
 
 Potential future enhancements include:
 
-* Full RV32I Instruction Set Support
-* Branch Prediction Unit
-* Cache Memory Integration
-* Pipeline Performance Analysis
-* FPGA Deployment
-* Advanced Hazard Resolution Techniques
+- Complete RV32I Instruction Set Support
+- Branch Prediction Unit
+- Cache Memory Integration
+- Performance Analysis
+- FPGA Implementation
+- Advanced Hazard Resolution Techniques
 
 ---
 
-## Author
+# Author
 
-Jay Jain
+**Jay Jain**
 
 Electronics and Communication Engineering
 
-Focus Areas:
+### Areas of Interest
 
-* VLSI Design
-* Digital Design
-* RTL Design
-* FPGA Development
-* Computer Architecture
-* Processor Design
+- VLSI Design
+- RTL Design
+- Digital Design
+- FPGA Development
+- Computer Architecture
+- Processor Design
